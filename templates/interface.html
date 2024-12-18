@@ -23,6 +23,17 @@
             border-radius: 8px;
             overflow: hidden;
         }
+        /* Facebook-like styling */
+        .facebook-post {
+            background-color: white;
+            border: 1px solid #dddfe2;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .facebook-header {
+            background-color: #3b5998;
+            color: white;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-indigo-50 to-blue-100 min-h-screen flex flex-col">
@@ -42,8 +53,7 @@
     </nav>
 
     <main class="container mx-auto px-4 py-12 flex-grow">
-        <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <!-- Link Generation Form (Left Column) -->
+        <div class="grid md:grid-cols-2 gap-4 max-w-5xl mx-auto">            <!-- Link Generation Form (Left Column) -->
             <div class="bg-white shadow-2xl rounded-xl overflow-hidden">
                 <div class="bg-blue-600 text-white p-6">
                     <h1 class="text-3xl font-bold">Generate Custom Short Link</h1>
@@ -148,43 +158,43 @@
                         type="submit" 
                         class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition duration-300 flex items-center justify-center"
                     >
-                        <i class="fas fa-link mr-2"></i> Generate Short Link
+                        <i class="fas fa-link mr-2" aria-hidden="true"></i> Generate Short Link
                     </button>
                 </form>
             </div>
 
-            <!-- WhatsApp Preview (Right Column) -->
+            <!-- WhatsApp Preview (Top Column) -->
             <div class="bg-white shadow-2xl rounded-xl overflow-hidden">
                 <div class="bg-green-500 text-white p-6">
-                    <h2 class="text-2xl font-bold">WhatsApp Link Preview</h2>
+                    <h2 class="text-2xl font-bold">Link Preview</h2>
                 </div>
 
                 <div class="p-6">
-                    <div class="whatsapp-chat border shadow-lg rounded-xl overflow-hidden" style="max-width: 350px; height: 600px; margin: 0 auto;">
+                    <div class="whatsapp-chat border shadow-lg rounded-xl overflow-hidden">
                         <div class="whatsapp-header text-white p-4 flex items-center">
-                            <i class="fas fa-arrow-left mr-4"></i>
-                            <img src="/static/images/Nizar.png" class="rounded-full mr-3 h-10 w-10" alt="Contact">
+                            <i class="fas fa-arrow-left mr-4" aria-label="Back"></i>
+                            <img src="/static/images/Nizar.png" class="rounded-full mr-3 h-10 w-10" alt="Contact Nizar">
                             <div>
                                 <p class="font-semibold">Nizar</p>
                                 <p class="text-xs opacity-75">left on seen</p>
                             </div>
                             <div class="ml-auto flex space-x-4">
-                                <i class="fas fa-video"></i>
-                                <i class="fas fa-phone"></i>
-                                <i class="fas fa-ellipsis-v"></i>
+                                <i class="fas fa-video" aria-label="Video Call"></i>
+                                <i class="fas fa-phone" aria-label="Phone Call"></i>
+                                <i class="fas fa-ellipsis-v" aria-label="More Options"></i>
                             </div>
                         </div>
 
                         <!-- Chat Messages Container -->
-                        <div class="p-4 overflow-y-auto" style="height: calc(100% - 120px);">
+                        <div class="p-4 overflow-y-auto">
                             <div class="flex justify-start mb-4">
                                 <div class="bg-white p-2 rounded-lg rounded-bl-none shadow-md link-preview-bubble">
                                     <div class="relative">
                                         <img 
                                             id="previewImage" 
-                                            src="https://via.placeholder.com/350x200" 
+                                            src="https://via.placeholder.com/100x100" 
                                             alt="Link Preview" 
-                                            class="w-full h-48 object-cover rounded-t-lg"
+                                            class="w-full h-32 object-cover rounded-t-lg"  
                                         >
                                         <div class="p-3">
                                             <p id="previewTitle" class="font-bold text-sm text-gray-800">Custom Link</p>
@@ -200,18 +210,67 @@
 
                         <!-- Message Input -->
                         <div class="bg-white p-3 border-t flex items-center">
-                            <i class="fas fa-smile text-gray-500 mr-3"></i>
+                            <i class="fas fa-smile text-gray-500 mr-3" aria-label="Emoji"></i>
                             <input 
                                 type="text" 
                                 placeholder="Type a message" 
                                 class="flex-grow px-2 py-1 border rounded-full"
                             >
-                            <i class="fas fa-microphone text-gray-500 mx-3"></i>
-                            <i class="fas fa-paper-plane text-green-500"></i>
+                            <i class="fas fa-microphone text-gray-500 mx-3" aria-label="Voice Message"></i>
+                            <i class="fas fa-paper-plane text-green-500" aria-label="Send Message"></i>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="p-6">
+                    <div class="facebook-post" style="max-width: 300px; margin: 0 auto;">
+                        <div class="p-4 flex items-center">
+                            <img src="/static/images/Nizar.png" class="rounded-full mr-3 h-10 w-10" alt="John Doe's Avatar">
+                            <div>
+                                <p class="font-semibold text-sm">Nizar Haider</p>
+                                <p class="text-xs text-gray-500">
+                                    <i class="fas fa-globe-americas mr-1" aria-hidden="true"></i> Just now
+                                </p>
+                            </div>
+                        </div>
+
+                        <div id="fbPostText" class="px-4 pb-2 text-sm text-gray-800">
+                            Check out this awesome link! 🔗
+                        </div>
+
+                        <div class="facebook-link-preview shadow-md">
+                            <img 
+                                id="fbPreviewImage" 
+                                src="https://via.placeholder.com/350x200" 
+                                alt="Link Preview" 
+                                class="w-full h-32 object-cover" 
+                            >
+                            <div class="p-3 border-t">
+                                <p id="fbPreviewDomain" class="text-xs text-gray-500 mb-1">
+                                    shrlnk.icu
+                                </p>
+                                <p id="fbPreviewTitle" class="font-semibold text-sm text-gray-800">
+                                    Custom Link Preview
+                                </p>
+                                <p id="fbPreviewDescription" class="text-xs text-gray-600 mt-1">
+                                    Click to view the link
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="p-3 flex justify-between text-gray-600 text-sm border-t">
+                            <div class="flex items-center">
+                                <i class="fas fa-thumbs-up mr-2" aria-hidden="true"></i> Like
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-comment mr-2" aria-hidden="true"></i> Comment
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-share mr-2" aria-hidden="true"></i> Share
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>       
         </div>
     </main>
 
@@ -221,43 +280,66 @@
         </div>
     </footer>
 
-    <script>
+    <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', () => {
             const imageUrlInput = document.getElementById('image_url');
             const titleInput = document.getElementById('og_title');
             const descriptionInput = document.getElementById('og_description');
             const shortLinkInput = document.getElementById('short_link');
 
+            // WhatsApp Preview Elements
             const previewImage = document.getElementById('previewImage');
             const previewTitle = document.getElementById('previewTitle');
             const previewDescription = document.getElementById('previewDescription');
             const previewUrl = document.getElementById('previewUrl');
 
-            // Update preview image
+            // Facebook Preview Elements
+            const fbPreviewImage = document.getElementById('fbPreviewImage');
+            const fbPreviewTitle = document.getElementById('fbPreviewTitle');
+            const fbPreviewDescription = document.getElementById('fbPreviewDescription');
+            const fbPostText = document.getElementById('fbPostText');
+            const fbPreviewDomain = document.getElementById('fbPreviewDomain');
+
+            // Update preview image for both previews
             imageUrlInput.addEventListener('input', (e) => {
                 const imageUrl = e.target.value;
                 previewImage.src = imageUrl || 'https://via.placeholder.com/350x200';
+                fbPreviewImage.src = imageUrl || 'https://via.placeholder.com/350x200';
+                
                 previewImage.onerror = () => {
                     previewImage.src = 'https://via.placeholder.com/350x200?text=Invalid+Image';
                 };
+                fbPreviewImage.onerror = () => {
+                    fbPreviewImage.src = 'https://via.placeholder.com/350x200?text=Invalid+Image';
+                };
             });
 
-            // Update preview title
+            // Update preview title for both previews
             titleInput.addEventListener('input', (e) => {
-                previewTitle.textContent = e.target.value || 'Custom Link';
+                const title = e.target.value || 'Custom Link';
+                previewTitle.textContent = title;
+                fbPreviewTitle.textContent = title;
             });
 
-            // Update preview description
+            // Update preview description for both previews
             descriptionInput.addEventListener('input', (e) => {
-                previewDescription.textContent = e.target.value || 'Click to view';
+                const description = e.target.value || 'Click to view';
+                previewDescription.textContent = description;
+                fbPreviewDescription.textContent = description;
             });
 
-            // Update preview URL
+            // Update preview URL for both previews
             shortLinkInput.addEventListener('input', (e) => {
                 const shortLink = e.target.value;
-                previewUrl.textContent = shortLink 
-                    ? `https://shrlnk.icu/${shortLink}` 
-                    : 'https://shrlnk.icu/your-link';
+                const fullUrl = shortLink ? `https://shrlnk.icu/${shortLink}` : 'https://shrlnk.icu/your-link';
+                
+                previewUrl.textContent = fullUrl;
+                
+                // For Facebook, update domain and add a post text
+                fbPreviewDomain.textContent = shortLink ? 'shrlnk.icu' : 'shrlnk.icu';
+                fbPostText.textContent = shortLink 
+                    ? `Check out this link: https://shrlnk.icu/${shortLink} 🔗` 
+                    : 'Check out this awesome link! 🔗';
             });
         });
     </script>
