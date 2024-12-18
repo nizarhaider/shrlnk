@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShortLink - Revolutionize Your Links</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-indigo-50 to-blue-100 min-h-screen flex flex-col">
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <svg class="w-10 h-10 text-blue-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M7.414 15.414a2 2 0 01-2.828-2.828l3-3a2 2 0 012.828 0 1 1 0 001.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 005.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5z" clip-rule="evenodd" />
+                </svg>
+                <span class="text-2xl font-bold text-gray-800">ShortLink</span>
+            </div>
+            <a href="/interface" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
+                Create Link
+            </a>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-16 flex-grow">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+                <h1 class="text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+                    Transform Your <span class="text-blue-600">Links</span> into 
+                    Powerful Marketing Tools
+                </h1>
+                <p class="text-xl text-gray-600 mb-8">
+                    Create custom, trackable short links with stunning previews that capture attention and drive engagement.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="/interface" class="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition duration-300 flex items-center">
+                        <i class="fas fa-link mr-2"></i> Create Short Link
+                    </a>
+                    <a href="#features" class="bg-white text-blue-600 px-6 py-3 rounded-full border border-blue-600 hover:bg-blue-50 transition duration-300">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+            <div class="hidden md:block">
+                <div class="bg-white p-6 rounded-xl shadow-2xl transform hover:scale-105 transition duration-300">
+                    <div class="bg-gray-200 h-48 rounded-lg mb-4 flex items-center justify-center">
+                        <svg class="w-24 h-24 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                        <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section id="features" class="mt-24">
+            <h2 class="text-4xl font-bold text-center mb-12 text-gray-900">
+                Why Choose ShortLink?
+            </h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
+                    <i class="fas fa-link text-4xl text-blue-600 mb-4 block"></i>
+                    <h3 class="text-xl font-bold mb-3">Custom Links</h3>
+                    <p class="text-gray-600">Create memorable, branded short links that reflect your identity.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
+                    <i class="fas fa-image text-4xl text-green-600 mb-4 block"></i>
+                    <h3 class="text-xl font-bold mb-3">Rich Previews</h3>
+                    <p class="text-gray-600">Add custom images and descriptions to make your links stand out.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
+                    <i class="fas fa-share-alt text-4xl text-purple-600 mb-4 block"></i>
+                    <h3 class="text-xl font-bold mb-3">Social Sharing</h3>
+                    <p class="text-gray-600">Optimize your links for maximum impact on social media platforms.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 ShortLink. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
