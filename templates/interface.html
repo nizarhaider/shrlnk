@@ -3,9 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShortLink - Generate Custom Links</title>
+    <title>shrlnk.icu - Generate Custom Links</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* WhatsApp-like chat styling */
+        .whatsapp-chat {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 810" width="1440" height="810"><rect width="100%" height="100%" fill="%23E5DDD5"/><path fill="%23D2DBD6" d="M0 0h1440v810H0z"/></svg>');
+            background-repeat: repeat;
+            background-size: cover;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .whatsapp-header {
+            background-color: #128C7E;
+        }
+        .link-preview-bubble {
+            max-width: 80%;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body class="bg-gradient-to-br from-indigo-50 to-blue-100 min-h-screen flex flex-col">
     <nav class="bg-white shadow-md">
@@ -15,7 +33,7 @@
                     <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5z" clip-rule="evenodd" />
                     <path fill-rule="evenodd" d="M7.414 15.414a2 2 0 01-2.828-2.828l3-3a2 2 0 012.828 0 1 1 0 001.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 005.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5z" clip-rule="evenodd" />
                 </svg>
-                <span class="text-2xl font-bold text-gray-800">ShortLink</span>
+                <span class="text-2xl font-bold text-gray-800">shrlnk.icu</span>
             </div>
             <a href="/" class="text-blue-600 hover:text-blue-800 transition duration-300">
                 Back to Home
@@ -24,119 +42,224 @@
     </nav>
 
     <main class="container mx-auto px-4 py-12 flex-grow">
-        <div class="max-w-2xl mx-auto bg-white shadow-2xl rounded-xl overflow-hidden">
-            <div class="bg-blue-600 text-white p-6">
-                <h1 class="text-3xl font-bold">Generate Custom Short Link</h1>
-            </div>
-
-            <form method="POST" class="p-8 space-y-6">
-                {% if error %}
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                    <span class="block sm:inline">{{ error }}</span>
-                </div>
-                {% endif %}
-
-                {% if success %}
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-                    <span class="block sm:inline">{{ success }}</span>
-                </div>
-                {% endif %}
-
-                <div>
-                    <label for="short_link" class="block text-gray-700 font-bold mb-2">
-                        Short Link <span class="text-red-500">*</span>
-                    </label>
-                    <input 
-                        type="text" 
-                        id="short_link" 
-                        name="short_link" 
-                        placeholder="Enter your custom short link, shrlnk.icu/example" 
-                        pattern="[a-zA-Z0-9-]{3,20}" 
-                        title="3-20 characters, alphanumeric and hyphens only"
-                        required 
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                    <p class="text-gray-500 text-sm mt-1">Use 3-20 characters, alphanumeric and hyphens only</p>
+        <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <!-- Link Generation Form (Left Column) -->
+            <div class="bg-white shadow-2xl rounded-xl overflow-hidden">
+                <div class="bg-blue-600 text-white p-6">
+                    <h1 class="text-3xl font-bold">Generate Custom Short Link</h1>
                 </div>
 
-                <div>
-                    <label for="original_url" class="block text-gray-700 font-bold mb-2">
-                        Original URL <span class="text-red-500">*</span>
-                    </label>
-                    <input 
-                        type="url" 
-                        id="original_url" 
-                        name="original_url" 
-                        placeholder="https://example.com" 
-                        required 
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                </div>
+                <form method="POST" class="p-8 space-y-6" id="linkForm">
+                    {% if error %}
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <span class="block sm:inline">{{ error }}</span>
+                    </div>
+                    {% endif %}
 
-                <div>
-                    <label for="image_url" class="block text-gray-700 font-bold mb-2">
-                        Preview Image URL <span class="text-red-500">*</span>
-                    </label>
-                    <input 
-                        type="url" 
-                        id="image_url" 
-                        name="image_url" 
-                        placeholder="https://example.com/image.jpg" 
-                        required 
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                </div>
-
-                <div class="bg-gray-50 p-6 rounded-lg">
-                    <h3 class="text-xl font-semibold text-gray-700 mb-4">
-                        Optional Preview Customization
-                    </h3>
+                    {% if success %}
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                        <span class="block sm:inline">{{ success }}</span>
+                    </div>
+                    {% endif %}
 
                     <div>
-                        <label for="og_title" class="block text-gray-700 mb-2">
-                            Preview Title
+                        <label for="short_link" class="block text-gray-700 font-bold mb-2">
+                            Short Link <span class="text-red-500">*</span>
                         </label>
                         <input 
                             type="text" 
-                            id="og_title" 
-                            name="og_title" 
-                            placeholder="Custom link title" 
-                            maxlength="200"
+                            id="short_link" 
+                            name="short_link" 
+                            placeholder="Enter your custom short link, shrlnk.icu/example" 
+                            pattern="[a-zA-Z0-9-]{3,20}" 
+                            title="3-20 characters, alphanumeric and hyphens only"
+                            required 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                        <p class="text-gray-500 text-sm mt-1">Use 3-20 characters, alphanumeric and hyphens only</p>
+                    </div>
+
+                    <div>
+                        <label for="original_url" class="block text-gray-700 font-bold mb-2">
+                            Original URL <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                            type="url" 
+                            id="original_url" 
+                            name="original_url" 
+                            placeholder="https://example.com" 
+                            required 
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                     </div>
 
-                    <div class="mt-4">
-                        <label for="og_description" class="block text-gray-700 mb-2">
-                            Preview Description
+                    <div>
+                        <label for="image_url" class="block text-gray-700 font-bold mb-2">
+                            Preview Image URL <span class="text-red-500">*</span>
                         </label>
-                        <textarea 
-                            id="og_description" 
-                            name="og_description" 
-                            placeholder="Add a description to make your link more engaging" 
-                            maxlength="200"
+                        <input 
+                            type="url" 
+                            id="image_url" 
+                            name="image_url" 
+                            placeholder="https://example.com/image.jpg" 
+                            required 
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            rows="3"
-                        ></textarea>
+                        >
+                        <p class="text-gray-500 text-sm mt-1">Image must be at least 200x200 pixels and under 8 MB</p>
                     </div>
+
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-4">
+                            Optional Preview Customization
+                        </h3>
+
+                        <div>
+                            <label for="og_title" class="block text-gray-700 mb-2">
+                                Preview Title
+                            </label>
+                            <input 
+                                type="text" 
+                                id="og_title" 
+                                name="og_title" 
+                                placeholder="Custom link title" 
+                                maxlength="200"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                        </div>
+
+                        <div class="mt-4">
+                            <label for="og_description" class="block text-gray-700 mb-2">
+                                Preview Description
+                            </label>
+                            <textarea 
+                                id="og_description" 
+                                name="og_description" 
+                                placeholder="Add a description to make your link more engaging" 
+                                maxlength="200"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                rows="3"
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="og_type" value="website">
+
+                    <button 
+                        type="submit" 
+                        class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition duration-300 flex items-center justify-center"
+                    >
+                        <i class="fas fa-link mr-2"></i> Generate Short Link
+                    </button>
+                </form>
+            </div>
+
+            <!-- WhatsApp Preview (Right Column) -->
+            <div class="bg-white shadow-2xl rounded-xl overflow-hidden">
+                <div class="bg-green-500 text-white p-6">
+                    <h2 class="text-2xl font-bold">WhatsApp Link Preview</h2>
                 </div>
 
-                <input type="hidden" name="og_type" value="website">
+                <div class="p-6">
+                    <div class="whatsapp-chat border shadow-lg rounded-xl overflow-hidden" style="max-width: 350px; height: 600px; margin: 0 auto;">
+                        <div class="whatsapp-header text-white p-4 flex items-center">
+                            <i class="fas fa-arrow-left mr-4"></i>
+                            <img src="/static/images/Nizar.png" class="rounded-full mr-3 h-10 w-10" alt="Contact">
+                            <div>
+                                <p class="font-semibold">Nizar</p>
+                                <p class="text-xs opacity-75">left on seen</p>
+                            </div>
+                            <div class="ml-auto flex space-x-4">
+                                <i class="fas fa-video"></i>
+                                <i class="fas fa-phone"></i>
+                                <i class="fas fa-ellipsis-v"></i>
+                            </div>
+                        </div>
 
-                <button 
-                    type="submit" 
-                    class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition duration-300 flex items-center justify-center"
-                >
-                    <i class="fas fa-link mr-2"></i> Generate Short Link
-                </button>
-            </form>
+                        <!-- Chat Messages Container -->
+                        <div class="p-4 overflow-y-auto" style="height: calc(100% - 120px);">
+                            <div class="flex justify-start mb-4">
+                                <div class="bg-white p-2 rounded-lg rounded-bl-none shadow-md link-preview-bubble">
+                                    <div class="relative">
+                                        <img 
+                                            id="previewImage" 
+                                            src="https://via.placeholder.com/350x200" 
+                                            alt="Link Preview" 
+                                            class="w-full h-48 object-cover rounded-t-lg"
+                                        >
+                                        <div class="p-3">
+                                            <p id="previewTitle" class="font-bold text-sm text-gray-800">Custom Link</p>
+                                            <p id="previewDescription" class="text-xs text-gray-600 mb-2">Click to view</p>
+                                            <p id="previewUrl" class="text-xs text-blue-600 truncate">
+                                                https://shrlnk.icu/your-link
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Message Input -->
+                        <div class="bg-white p-3 border-t flex items-center">
+                            <i class="fas fa-smile text-gray-500 mr-3"></i>
+                            <input 
+                                type="text" 
+                                placeholder="Type a message" 
+                                class="flex-grow px-2 py-1 border rounded-full"
+                            >
+                            <i class="fas fa-microphone text-gray-500 mx-3"></i>
+                            <i class="fas fa-paper-plane text-green-500"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
     <footer class="bg-gray-800 text-white py-8">
         <div class="container mx-auto px-4 text-center">
-            <p>&copy; 2024 ShortLink. All rights reserved.</p>
+            <p>&copy; 2024 shrlnk.icu. All rights reserved.</p>
         </div>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const imageUrlInput = document.getElementById('image_url');
+            const titleInput = document.getElementById('og_title');
+            const descriptionInput = document.getElementById('og_description');
+            const shortLinkInput = document.getElementById('short_link');
+
+            const previewImage = document.getElementById('previewImage');
+            const previewTitle = document.getElementById('previewTitle');
+            const previewDescription = document.getElementById('previewDescription');
+            const previewUrl = document.getElementById('previewUrl');
+
+            // Update preview image
+            imageUrlInput.addEventListener('input', (e) => {
+                const imageUrl = e.target.value;
+                previewImage.src = imageUrl || 'https://via.placeholder.com/350x200';
+                previewImage.onerror = () => {
+                    previewImage.src = 'https://via.placeholder.com/350x200?text=Invalid+Image';
+                };
+            });
+
+            // Update preview title
+            titleInput.addEventListener('input', (e) => {
+                previewTitle.textContent = e.target.value || 'Custom Link';
+            });
+
+            // Update preview description
+            descriptionInput.addEventListener('input', (e) => {
+                previewDescription.textContent = e.target.value || 'Click to view';
+            });
+
+            // Update preview URL
+            shortLinkInput.addEventListener('input', (e) => {
+                const shortLink = e.target.value;
+                previewUrl.textContent = shortLink 
+                    ? `https://shrlnk.icu/${shortLink}` 
+                    : 'https://shrlnk.icu/your-link';
+            });
+        });
+    </script>
 </body>
 </html>

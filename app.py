@@ -5,6 +5,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
 from utils.validation import (
+    validate_image,
     validate_short_link,
     validate_text_input,
     validate_url,
@@ -66,6 +67,14 @@ def generate():
 
     if not validate_url(original_url) or not validate_url(image_url):
         return jsonify({"error": "Invalid URL format. Use full HTTP/HTTPS URLs."}), 400
+    
+    # Validate image
+    image_valid, image_error = validate_image(image_url)
+    if not image_valid:
+        return render_template(
+            "interface.html",
+            error=f"Invalid image: {image_error}",
+        )
 
     # Validate optional inputs
     if og_title and not validate_text_input(og_title):
@@ -192,4 +201,4 @@ def interface():
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
