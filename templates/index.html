@@ -1,20 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShortLinks - Revolutionize Your Links</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ShortLinks - Revolutionize Your Links</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <link rel="icon" href="/static/images/logo.svg" type="image/x-icon">
+
+        <!-- Open Graph Meta Tags -->
+        <meta property="og:title" content="ShortLinks - Revolutionize Your Links">
+        <meta property="og:description" content="Create custom, trackable short links with stunning previews that capture attention and drive engagement.">
+        <meta property="og:image" content="/static/images/logo.svg">
+        <meta property="og:url" content="https://shrlnk.icu">
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="ShortLinks">
+        <meta property="og:locale" content="en_US">
+    </head>
 <body class="bg-gradient-to-br from-indigo-50 to-blue-100 min-h-screen flex flex-col">
     <nav class="bg-white shadow-md">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center">
-                <svg class="w-10 h-10 text-blue-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5z" clip-rule="evenodd" />
-                    <path fill-rule="evenodd" d="M7.414 15.414a2 2 0 01-2.828-2.828l3-3a2 2 0 012.828 0 1 1 0 001.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 005.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5z" clip-rule="evenodd" />
-                </svg>
+                <img id="logo_header" src="/static/images/logo.svg" alt="Logo" class="w-10">
                 <span class="text-2xl font-bold text-gray-800">shrlnk.icu</span>
             </div>
             <a href="/interface" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
