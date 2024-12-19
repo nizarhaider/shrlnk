@@ -160,7 +160,7 @@
                             <div class="flex justify-start mb-4">
                                 <div class="bg-gray-800 p-2 rounded-lg rounded-bl-none shadow-md link-preview-bubble">
                                     <div class="relative">
-                                        <img id="previewImage" src="https://via.placeholder.com/300x350" alt="Link Preview" class="w-full h-32 object-cover rounded-t-lg">
+                                        <img id="previewImage" src="https://placehold.co/600x400" alt="Link Preview" class="w-full h-32 object-cover rounded-t-lg">
                                         <div class="p-3">
                                             <p id="previewTitle" class="font-bold text-sm">Custom Link</p>
                                             <p id="previewDescription" class="text-xs text-gray-400 mb-2">Click to view</p>
@@ -189,7 +189,7 @@
                         </div>
                         <div id="fbPostText" class="px-2 pb-1 text-sm">Check out this awesome link! 🔗</div>
                         <div class="facebook-link-preview shadow-md">
-                            <img id="fbPreviewImage" src="https://via.placeholder.com/350x200" alt="Link Preview" class="w-full h-32 object-cover">
+                            <img id="fbPreviewImage" src="https://placehold.co/600x400" alt="Link Preview" class="w-full h-32 object-cover">
                             <div class="p-3 border-t border-gray-700">
                                 <p id="fbPreviewDomain" class="text-xs text-gray-400 mb-1">shrlnk.icu</p>
                                 <p id="fbPreviewTitle" class="font-semibold text-sm">Custom Link Preview</p>
@@ -220,12 +220,12 @@
                         </div>
                         <div id="linkedinPostText" class="px-3 py-2 text-sm">Excited to share this interesting link! 🔗 #Technology #Innovation</div>
                         <div class="border border-gray-700 cursor-pointer hover:bg-gray-700">
-                            <img id="linkedinPreviewImage" src="https://via.placeholder.com/552x289" alt="Link Preview" class="w-full object-cover" style="max-height: 289px;">
+                            <img id="linkedinPreviewImage" src="https://placehold.co/600x400" alt="Link Preview" class="w-full object-cover" style="max-height: 289px;">
                             <div class="p-3">
                                 <p id="linkedinPreviewTitle" class="font-semibold text-base">Custom Link Preview</p>
                                 <p id="linkedinPreviewDescription" class="text-sm text-gray-400 mt-1">Click to view the link</p>
                                 <p id="linkedinPreviewDomain" class="text-xs text-gray-400 mt-2 flex items-center">
-                                    <img src="/favicon.ico" alt="" class="w-4 h-4 mr-1">shrlnk.icu
+                                    shrlnk.icu
                                 </p>
                             </div>
                         </div>
@@ -279,7 +279,7 @@
             imageUrlInput.addEventListener('input', (e) => {
                 const imageUrl = e.target.value;
                 [previewImage, fbPreviewImage, linkedinPreviewImage].forEach(img => {
-                    img.src = imageUrl || 'https://via.placeholder.com/350x200';
+                    img.src = imageUrl || 'https://placehold.co/600x400';
                     img.onerror = () => img.src = 'https://via.placeholder.com/350x200?text=Invalid+Image';
                 });
             });
@@ -316,5 +316,11 @@
             });
             tabs[0].click(); // Activate the first tab by default
         });
+        if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
+                // Reset form on page reload
+                window.onload = function() {
+                    document.getElementById('linkForm').reset();
+                }
+            }
     </script>
 </body>
