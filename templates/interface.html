@@ -7,32 +7,50 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-        /* WhatsApp-like chat styling */
-        .whatsapp-chat {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 810" width="1440" height="810"><rect width="100%" height="100%" fill="%23E5DDD5"/><path fill="%23D2DBD6" d="M0 0h1440v810H0z"/></svg>');
-            background-repeat: repeat;
-            background-size: cover;
-            border-radius: 10px;
-            overflow: hidden;
+        .preview-container {
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            background-color: #1a1a1a; /* Dark background color */
         }
-        .whatsapp-header {
-            background-color: #128C7E;
-        }
-        .link-preview-bubble {
-            max-width: 80%;
+        .preview-box {
             border-radius: 8px;
+            max-width: 350px;
+            width: 100%;
+            background-color: #2a2a2a; /* Dark theme for previews */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
             overflow: hidden;
+            margin: auto;
+            color: white; /* Text color for contrast */
         }
-        /* Facebook-like styling */
-        .facebook-post {
-            background-color: white;
-            border: 1px solid #dddfe2;
-            border-radius: 8px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        .tab-link {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            text-align: center;
+            flex-grow: 1;
+            border-bottom: 2px solid transparent;
+            color: white; /* Tab text color */
         }
-        .facebook-header {
-            background-color: #3b5998;
-            color: white;
+        .tab-link.active {
+            border-bottom: 2px solid white; /* Active tab border color */
+        }
+        .tabs {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px solid #333;
+        }
+        .whatsapp-tab {
+            background-color: #25D366;
+        }
+        .facebook-tab {
+            background-color: #4267B2;
+        }
+        .linkedin-tab {
+            background-color: #0077B5;
         }
     </style>
 </head>
@@ -42,137 +60,73 @@
             <div class="flex items-center">
                 <svg class="w-10 h-10 text-blue-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5z" clip-rule="evenodd" />
-                    <path fill-rule="evenodd" d="M7.414 15.414a2 2 0 01-2.828-2.828l3-3a2 2 0 012.828 0 1 1 0 001.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 005.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M7.414 15.414a2 2 0 01-2.828-2.828l3-3a2 2 0 012.828 0 1 1 0 001.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 005.656 5.656l1.5 1.5a1 1 0 10-1.414-1.414l-1.5 1.5z" clip-rule="evenodd" />
                 </svg>
                 <span class="text-2xl font-bold text-gray-800">shrlnk.icu</span>
             </div>
-            <a href="/" class="text-blue-600 hover:text-blue-800 transition duration-300">
-                Back to Home
-            </a>
+            <a href="/" class="text-blue-600 hover:text-blue-800 transition duration-300">Back to Home</a>
         </div>
     </nav>
 
     <main class="container mx-auto px-4 py-12 flex-grow">
-        <div class="grid md:grid-cols-2 gap-4 max-w-5xl mx-auto">            <!-- Link Generation Form (Left Column) -->
+        <div class="grid md:grid-cols-2 gap-4 max-w-5xl mx-auto">
             <div class="bg-white shadow-2xl rounded-xl overflow-hidden">
                 <div class="bg-blue-600 text-white p-6">
                     <h1 class="text-3xl font-bold">Generate Custom Short Link</h1>
                 </div>
-
                 <form method="POST" class="p-8 space-y-6" id="linkForm">
                     {% if error %}
                     <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                         <span class="block sm:inline">{{ error }}</span>
                     </div>
                     {% endif %}
-
                     {% if success %}
                     <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
                         <span class="block sm:inline">{{ success }}</span>
                     </div>
                     {% endif %}
-
                     <div>
-                        <label for="short_link" class="block text-gray-700 font-bold mb-2">
-                            Short Link <span class="text-red-500">*</span>
-                        </label>
-                        <input 
-                            type="text" 
-                            id="short_link" 
-                            name="short_link" 
-                            placeholder="Enter your custom short link, shrlnk.icu/example" 
-                            pattern="[a-zA-Z0-9-]{3,20}" 
-                            title="3-20 characters, alphanumeric and hyphens only"
-                            required 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
+                        <label for="short_link" class="block text-gray-700 font-bold mb-2">Short Link <span class="text-red-500">*</span></label>
+                        <input type="text" id="short_link" name="short_link" placeholder="Enter your custom short link, shrlnk.icu/example" pattern="[a-zA-Z0-9-]{3,20}" title="3-20 characters, alphanumeric and hyphens only" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <p class="text-gray-500 text-sm mt-1">Use 3-20 characters, alphanumeric and hyphens only</p>
                     </div>
-
                     <div>
-                        <label for="original_url" class="block text-gray-700 font-bold mb-2">
-                            Original URL <span class="text-red-500">*</span>
-                        </label>
-                        <input 
-                            type="url" 
-                            id="original_url" 
-                            name="original_url" 
-                            placeholder="https://example.com" 
-                            required 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
+                        <label for="original_url" class="block text-gray-700 font-bold mb-2">Original URL <span class="text-red-500">*</span></label>
+                        <input type="url" id="original_url" name="original_url" placeholder="https://example.com" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
-
                     <div>
-                        <label for="image_url" class="block text-gray-700 font-bold mb-2">
-                            Preview Image URL <span class="text-red-500">*</span>
-                        </label>
-                        <input 
-                            type="url" 
-                            id="image_url" 
-                            name="image_url" 
-                            placeholder="https://example.com/image.jpg" 
-                            required 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
+                        <label for="image_url" class="block text-gray-700 font-bold mb-2">Preview Image URL <span class="text-red-500">*</span></label>
+                        <input type="url" id="image_url" name="image_url" placeholder="https://example.com/image.jpg" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <p class="text-gray-500 text-sm mt-1">Image must be at least 200x200 pixels and under 8 MB</p>
                     </div>
-
                     <div class="bg-gray-50 p-6 rounded-lg">
-                        <h3 class="text-xl font-semibold text-gray-700 mb-4">
-                            Optional Preview Customization
-                        </h3>
-
+                        <h3 class="text-xl font-semibold text-gray-700 mb-4">Optional Preview Customization</h3>
                         <div>
-                            <label for="og_title" class="block text-gray-700 mb-2">
-                                Preview Title
-                            </label>
-                            <input 
-                                type="text" 
-                                id="og_title" 
-                                name="og_title" 
-                                placeholder="Custom link title" 
-                                maxlength="200"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            >
+                            <label for="og_title" class="block text-gray-700 mb-2">Preview Title</label>
+                            <input type="text" id="og_title" name="og_title" placeholder="Custom link title" maxlength="200" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
-
                         <div class="mt-4">
-                            <label for="og_description" class="block text-gray-700 mb-2">
-                                Preview Description
-                            </label>
-                            <textarea 
-                                id="og_description" 
-                                name="og_description" 
-                                placeholder="Add a description to make your link more engaging" 
-                                maxlength="200"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                rows="3"
-                            ></textarea>
+                            <label for="og_description" class="block text-gray-700 mb-2">Preview Description</label>
+                            <textarea id="og_description" name="og_description" placeholder="Add a description to make your link more engaging" maxlength="200" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" rows="3"></textarea>
                         </div>
                     </div>
-
                     <input type="hidden" name="og_type" value="website">
-
-                    <button 
-                        type="submit" 
-                        class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition duration-300 flex items-center justify-center"
-                    >
+                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition duration-300 flex items-center justify-center">
                         <i class="fas fa-link mr-2" aria-hidden="true"></i> Generate Short Link
                     </button>
                 </form>
             </div>
 
-            <!-- WhatsApp Preview (Top Column) -->
+            <!-- Socials Previews -->
             <div class="bg-white shadow-2xl rounded-xl overflow-hidden">
-                <div class="bg-green-500 text-white p-6">
-                    <h2 class="text-2xl font-bold">Link Preview</h2>
+                <div class="tabs">
+                    <div class="tab-link whatsapp-tab" data-target="#whatsapp">WhatsApp</div>
+                    <div class="tab-link facebook-tab" data-target="#facebook">Facebook</div>
+                    <div class="tab-link linkedin-tab" data-target="#linkedin">LinkedIn</div>
                 </div>
-
-                <div class="p-6">
-                    <div class="whatsapp-chat border shadow-lg rounded-xl overflow-hidden">
-                        <div class="whatsapp-header text-white p-4 flex items-center">
-                            <i class="fas fa-arrow-left mr-4" aria-label="Back"></i>
+                <div id="whatsapp" class="preview-container">
+                    <div class="preview-box">
+                        <div class="p-4 flex items-center">
                             <img src="/static/images/Nizar.png" class="rounded-full mr-3 h-10 w-10" alt="Contact Nizar">
                             <div>
                                 <p class="font-semibold">Nizar</p>
@@ -184,93 +138,93 @@
                                 <i class="fas fa-ellipsis-v" aria-label="More Options"></i>
                             </div>
                         </div>
-
-                        <!-- Chat Messages Container -->
-                        <div class="p-4 overflow-y-auto">
+                        <div class="p-4">
                             <div class="flex justify-start mb-4">
-                                <div class="bg-white p-2 rounded-lg rounded-bl-none shadow-md link-preview-bubble">
+                                <div class="bg-gray-800 p-2 rounded-lg rounded-bl-none shadow-md link-preview-bubble">
                                     <div class="relative">
-                                        <img 
-                                            id="previewImage" 
-                                            src="https://via.placeholder.com/100x100" 
-                                            alt="Link Preview" 
-                                            class="w-full h-32 object-cover rounded-t-lg"  
-                                        >
+                                        <img id="previewImage" src="https://via.placeholder.com/100x100" alt="Link Preview" class="w-full h-32 object-cover rounded-t-lg">
                                         <div class="p-3">
-                                            <p id="previewTitle" class="font-bold text-sm text-gray-800">Custom Link</p>
-                                            <p id="previewDescription" class="text-xs text-gray-600 mb-2">Click to view</p>
-                                            <p id="previewUrl" class="text-xs text-blue-600 truncate">
-                                                https://shrlnk.icu/your-link
-                                            </p>
+                                            <p id="previewTitle" class="font-bold text-sm">Custom Link</p>
+                                            <p id="previewDescription" class="text-xs text-gray-400 mb-2">Click to view</p>
+                                            <p id="previewUrl" class="text-xs text-blue-400 truncate">https://shrlnk.icu/your-link</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Message Input -->
-                        <div class="bg-white p-3 border-t flex items-center">
-                            <i class="fas fa-smile text-gray-500 mr-3" aria-label="Emoji"></i>
-                            <input 
-                                type="text" 
-                                placeholder="Type a message" 
-                                class="flex-grow px-2 py-1 border rounded-full"
-                            >
-                            <i class="fas fa-microphone text-gray-500 mx-3" aria-label="Voice Message"></i>
+                        <div class="bg-gray-800 p-2 border-t flex items-center">
+                            <i class="fas fa-smile text-gray-400 mr-3" aria-label="Emoji"></i>
+                            <input type="text" placeholder="Type a message" class="flex-grow px-2 py-1 border border-gray-600 bg-transparent text-white rounded-full">
+                            <i class="fas fa-microphone text-gray-400 mx-3" aria-label="Voice Message"></i>
                             <i class="fas fa-paper-plane text-green-500" aria-label="Send Message"></i>
                         </div>
                     </div>
                 </div>
-                <div class="p-6">
-                    <div class="facebook-post" style="max-width: 300px; margin: 0 auto;">
+                <div id="facebook" class="preview-container hidden">
+                    <div class="preview-box">
                         <div class="p-4 flex items-center">
                             <img src="/static/images/Nizar.png" class="rounded-full mr-3 h-10 w-10" alt="John Doe's Avatar">
                             <div>
                                 <p class="font-semibold text-sm">Nizar Haider</p>
-                                <p class="text-xs text-gray-500">
-                                    <i class="fas fa-globe-americas mr-1" aria-hidden="true"></i> Just now
-                                </p>
+                                <p class="text-xs"><i class="fas fa-globe-americas mr-1" aria-hidden="true"></i> Just now</p>
                             </div>
                         </div>
-
-                        <div id="fbPostText" class="px-4 pb-2 text-sm text-gray-800">
-                            Check out this awesome link! 🔗
-                        </div>
-
+                        <div id="fbPostText" class="px-2 pb-1 text-sm">Check out this awesome link! 🔗</div>
                         <div class="facebook-link-preview shadow-md">
-                            <img 
-                                id="fbPreviewImage" 
-                                src="https://via.placeholder.com/350x200" 
-                                alt="Link Preview" 
-                                class="w-full h-32 object-cover" 
-                            >
-                            <div class="p-3 border-t">
-                                <p id="fbPreviewDomain" class="text-xs text-gray-500 mb-1">
-                                    shrlnk.icu
-                                </p>
-                                <p id="fbPreviewTitle" class="font-semibold text-sm text-gray-800">
-                                    Custom Link Preview
-                                </p>
-                                <p id="fbPreviewDescription" class="text-xs text-gray-600 mt-1">
-                                    Click to view the link
-                                </p>
+                            <img id="fbPreviewImage" src="https://via.placeholder.com/350x200" alt="Link Preview" class="w-full h-32 object-cover">
+                            <div class="p-3 border-t border-gray-700">
+                                <p id="fbPreviewDomain" class="text-xs text-gray-400 mb-1">shrlnk.icu</p>
+                                <p id="fbPreviewTitle" class="font-semibold text-sm">Custom Link Preview</p>
+                                <p id="fbPreviewDescription" class="text-xs text-gray-400 mt-1">Click to view the link</p>
                             </div>
                         </div>
-
-                        <div class="p-3 flex justify-between text-gray-600 text-sm border-t">
-                            <div class="flex items-center">
-                                <i class="fas fa-thumbs-up mr-2" aria-hidden="true"></i> Like
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-comment mr-2" aria-hidden="true"></i> Comment
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-share mr-2" aria-hidden="true"></i> Share
-                            </div>
+                        <div class="p-2 flex justify-between text-gray-400 text-sm border-t border-gray-700">
+                            <div class="flex items-center"><i class="fas fa-thumbs-up mr-2" aria-hidden="true"></i> Like</div>
+                            <div class="flex items-center"><i class="fas fa-comment mr-2" aria-hidden="true"></i> Comment</div>
+                            <div class="flex items-center"><i class="fas fa-share mr-2" aria-hidden="true"></i> Share</div>
                         </div>
                     </div>
                 </div>
-            </div>       
+                <div id="linkedin" class="preview-container hidden">
+                    <div class="preview-box">
+                        <div class="p-3 flex items-center">
+                            <img src="/static/images/Nizar.png" class="rounded-full h-12 w-12 mr-2" alt="Profile Picture">
+                            <div class="flex-1">
+                                <p class="font-semibold text-base">Nizar Haider</p>
+                                <p class="text-xs">Software Developer</p>
+                                <p class="text-xs flex items-center">
+                                    <span>Just now</span>
+                                    <span class="mx-1">•</span>
+                                    <i class="fas fa-globe-americas"></i>
+                                </p>
+                            </div>
+                            <button class="text-gray-400 hover:text-gray-200"><i class="fas fa-ellipsis-h"></i></button>
+                        </div>
+                        <div id="linkedinPostText" class="px-3 py-2 text-sm">Excited to share this interesting link! 🔗 #Technology #Innovation</div>
+                        <div class="border border-gray-700 cursor-pointer hover:bg-gray-700">
+                            <img id="linkedinPreviewImage" src="https://via.placeholder.com/552x289" alt="Link Preview" class="w-full object-cover" style="max-height: 289px;">
+                            <div class="p-3">
+                                <p id="linkedinPreviewTitle" class="font-semibold text-base">Custom Link Preview</p>
+                                <p id="linkedinPreviewDescription" class="text-sm text-gray-400 mt-1">Click to view the link</p>
+                                <p id="linkedinPreviewDomain" class="text-xs text-gray-400 mt-2 flex items-center">
+                                    <img src="/favicon.ico" alt="" class="w-4 h-4 mr-1">shrlnk.icu
+                                </p>
+                            </div>
+                        </div>
+                        <div class="px-2 py-1 flex items-center text-xs text-gray-400">
+                            <span class="flex items-center"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' data-supported-dps='16x16' fill='%230a66c2' width='16' height='16'%3E%3Cpath d='M8 0a8 8 0 018 8 8 8 0 01-8 8 8 8 0 01-8-8 8 8 0 018-8z'/%3E%3Cpath d='M10.83 10.83L12 9.66l-2.83-2.83L12 4 10.83 2.83 8 5.66 5.17 2.83 4 4l2.83 2.83L4 9.66l1.17 1.17L8 8l2.83 2.83z' fill='white'/%3E%3C/svg%3E" class="mr-1" alt="Like"></span>
+                            <span class="ml-1">0</span>
+                            <span class="mx-1">•</span>
+                            <span>0 comments</span>
+                        </div>
+                        <div class="border-t border-gray-700 px-2 py-1 flex justify-between">
+                            <button class="linkedin-button flex items-center justify-center flex-1 text-gray-400"><i class="far fa-thumbs-up mr-2"></i> Like</button>
+                            <button class="linkedin-button flex items-center justify-center flex-1 text-gray-400"><i class="far fa-comment mr-2"></i> Comment</button>
+                            <button class="linkedin-button flex items-center justify-center flex-1 text-gray-400"><i class="fas fa-share mr-2"></i> Share</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -287,61 +241,62 @@
             const descriptionInput = document.getElementById('og_description');
             const shortLinkInput = document.getElementById('short_link');
 
-            // WhatsApp Preview Elements
             const previewImage = document.getElementById('previewImage');
             const previewTitle = document.getElementById('previewTitle');
             const previewDescription = document.getElementById('previewDescription');
             const previewUrl = document.getElementById('previewUrl');
 
-            // Facebook Preview Elements
             const fbPreviewImage = document.getElementById('fbPreviewImage');
             const fbPreviewTitle = document.getElementById('fbPreviewTitle');
             const fbPreviewDescription = document.getElementById('fbPreviewDescription');
             const fbPostText = document.getElementById('fbPostText');
             const fbPreviewDomain = document.getElementById('fbPreviewDomain');
 
-            // Update preview image for both previews
+            const linkedinPreviewImage = document.getElementById('linkedinPreviewImage');
+            const linkedinPreviewTitle = document.getElementById('linkedinPreviewTitle');
+            const linkedinPreviewDescription = document.getElementById('linkedinPreviewDescription');
+            const linkedinPostText = document.getElementById('linkedinPostText');
+            const linkedinPreviewDomain = document.getElementById('linkedinPreviewDomain');
+
             imageUrlInput.addEventListener('input', (e) => {
                 const imageUrl = e.target.value;
-                previewImage.src = imageUrl || 'https://via.placeholder.com/350x200';
-                fbPreviewImage.src = imageUrl || 'https://via.placeholder.com/350x200';
-                
-                previewImage.onerror = () => {
-                    previewImage.src = 'https://via.placeholder.com/350x200?text=Invalid+Image';
-                };
-                fbPreviewImage.onerror = () => {
-                    fbPreviewImage.src = 'https://via.placeholder.com/350x200?text=Invalid+Image';
-                };
+                [previewImage, fbPreviewImage, linkedinPreviewImage].forEach(img => {
+                    img.src = imageUrl || 'https://via.placeholder.com/350x200';
+                    img.onerror = () => img.src = 'https://via.placeholder.com/350x200?text=Invalid+Image';
+                });
             });
 
-            // Update preview title for both previews
             titleInput.addEventListener('input', (e) => {
                 const title = e.target.value || 'Custom Link';
-                previewTitle.textContent = title;
-                fbPreviewTitle.textContent = title;
+                [previewTitle, fbPreviewTitle, linkedinPreviewTitle].forEach(el => el.textContent = title);
             });
 
-            // Update preview description for both previews
             descriptionInput.addEventListener('input', (e) => {
                 const description = e.target.value || 'Click to view';
-                previewDescription.textContent = description;
-                fbPreviewDescription.textContent = description;
+                [previewDescription, fbPreviewDescription, linkedinPreviewDescription].forEach(el => el.textContent = description);
             });
 
-            // Update preview URL for both previews
             shortLinkInput.addEventListener('input', (e) => {
                 const shortLink = e.target.value;
                 const fullUrl = shortLink ? `https://shrlnk.icu/${shortLink}` : 'https://shrlnk.icu/your-link';
-                
                 previewUrl.textContent = fullUrl;
-                
-                // For Facebook, update domain and add a post text
-                fbPreviewDomain.textContent = shortLink ? 'shrlnk.icu' : 'shrlnk.icu';
-                fbPostText.textContent = shortLink 
-                    ? `Check out this link: https://shrlnk.icu/${shortLink} 🔗` 
-                    : 'Check out this awesome link! 🔗';
+                fbPreviewDomain.textContent = 'shrlnk.icu';
+                fbPostText.textContent = shortLink ? `Check out this link: ${fullUrl} 🔗` : 'Check out this awesome link! 🔗';
+                linkedinPostText.textContent = shortLink ? `Excited to share this link: ${fullUrl} 🔗 #Technology #Innovation` : 'Excited to share this interesting link! 🔗 #Technology #Innovation';
+                linkedinPreviewDomain.innerHTML = `<img src="/favicon.ico" alt="" class="w-4 h-4 mr-1">shrlnk.icu${shortLink ? '/' + shortLink : ''}`;
             });
+
+            // Tab functionality
+            const tabs = document.querySelectorAll('.tab-link');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.querySelectorAll('.preview-container').forEach(container => container.classList.add('hidden'));
+                    document.querySelector(tab.dataset.target).classList.remove('hidden');
+                });
+            });
+            tabs[0].click(); // Activate the first tab by default
         });
     </script>
 </body>
-</html>
