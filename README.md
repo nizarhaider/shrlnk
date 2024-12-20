@@ -104,13 +104,13 @@ sudo systemctl start gonicorn
 
 1. Create Nginx site configuration:
 ```bash
-sudo nano /etc/nginx/sites-available/shrlnk
+sudo nano /etc/nginx/nginx.conf
 ```
 
 ```nginx
 server {
     listen 80;
-    server_name yourdomain.com www.yourdomain.com;  # Replace with your domain
+    server_name yourdomain.com  # Replace with your domain
 
     location / {
         proxy_pass http://127.0.0.1:8000;
@@ -124,10 +124,10 @@ server {
 
 2. Enable the site and restart Nginx:
 ```bash
-sudo ln -s /etc/nginx/sites-available/shrlnk /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
 ```
+4. Make sure to add A name record to your domain DNS config that points to your ec2 public ip address.
 
 3. Set up SSL with Let's Encrypt:
 ```bash
@@ -162,9 +162,8 @@ DOMAIN = "yourdomain.com"  # Replace with your actual domain
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+Nah no license... It's yours if you want it.
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/yourusername/shrlnk.icu/issues).
-
+Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/yourusername/shrlnk/issues).
