@@ -19,6 +19,7 @@ app = Flask(__name__)
 DATABASE = "links.db"
 MAX_SHORT_LINK_LENGTH = 20
 MIN_SHORT_LINK_LENGTH = 3
+DOMAIN_NAME = 'shrlnk.icu'
 
 # Rate Limiting
 limiter = Limiter(
@@ -113,7 +114,7 @@ def generate():
             conn.commit()
 
         return jsonify(
-            {"message": f"Short link generated: https://shrlnk.icu/{short_link}"}
+            {"message": f"Short link generated: https://{DOMAIN_NAME}/{short_link}"}
         )
     except Exception:
         return jsonify({"error": "An unexpected error occurred"}), 500
@@ -192,7 +193,7 @@ def interface():
 
             return render_template(
                 "interface.html",
-                success=f"Short link generated: https://shrlnk.icu/{short_link}",
+                success=f"Short link generated: https://{DOMAIN_NAME}/{short_link}",
             )
         except Exception as e:
             return render_template("interface.html", error=str(e))
