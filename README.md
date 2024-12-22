@@ -160,9 +160,6 @@ DOMAIN = "yourdomain.com"  # Replace with your actual domain
 - **Social Media Optimization**: Customize how your links appear when shared
 - **Mobile Responsive**: Create and manage links from any device
 
-## 📄 License
-
-Nah no license... It's yours if you want it.
 
 ## 🤝 Contributing
 
