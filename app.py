@@ -1,5 +1,7 @@
 import sqlite3
 import os
+import requests
+from bs4 import BeautifulSoup
 from flask import Flask, request, render_template, jsonify
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -155,14 +157,24 @@ def interface():
         # Required fields
         short_link = request.form.get("short_link")
         original_url = request.form.get("original_url")
-        image_url = request.form.get("image_url")
+        use_original_image = request.form.get("useOriginalImage") == "on"
+        
+        # Get image URL based on user choice
+        if use_original_image:
+            image_url = request.form.get("og_image_url")
+            if not image_url:
+                return render_template(
+                    "interface.html",
+                    error="Failed to fetch image from original URL. Please try again or use a custom image URL.",
+                )
+        else:
+            image_url = request.form.get("image_url")
 
         # Optional OG tag fields
         og_title = request.form.get("og_title", "")
         og_description = request.form.get("og_description", "")
-
         # Validate required fields
-        if not short_link or not original_url or not image_url:
+        if not short_link or not original_url:
             return render_template(
                 "interface.html",
                 error="Short link, original URL, and image URL are required!",
@@ -199,6 +211,36 @@ def interface():
             return render_template("interface.html", error=str(e))
 
     return render_template("interface.html")
+
+
+@app.route("/get_og_image")
+def get_og_image():
+    url = request.args.get('url')
+    if not url:
+        return jsonify({"error": "URL parameter is required"}), 400
+        
+    try:
+        response = requests.get(url, timeout=5)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        # Try to find og:image meta tag
+        og_image = soup.find("meta", property="og:image")
+        if og_image and og_image.get("content"):
+            return jsonify({"image_url": og_image.get("content")})
+        
+        # If no og:image, try to find the first image
+        first_image = soup.find("img")
+        if first_image and first_image.get("src"):
+            img_src = first_image.get("src")
+            # Convert relative URLs to absolute
+            if not img_src.startswith(('http://', 'https://')):
+                img_src = requests.compat.urljoin(url, img_src)
+            return jsonify({"image_url": img_src})
+        
+        return jsonify({"error": "No image found"}), 404
+        
+    except requests.RequestException as e:
+        return jsonify({"error": f"Failed to fetch URL: {str(e)}"}), 500
 
 
 if __name__ == "__main__":

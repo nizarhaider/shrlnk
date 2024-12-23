@@ -132,8 +132,14 @@
                         <input type="url" id="original_url" name="original_url" placeholder="https://example.com" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div>
-                        <label for="image_url" class="block text-gray-700 font-bold mb-2">Preview Image URL <span class="text-red-500">*</span></label>
-                        <input type="url" id="image_url" name="image_url" placeholder="https://example.com/image.jpg" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <label for="image_url" class="block text-gray-700 font-bold mb-2">Preview Image URL</label>
+                        <div class="flex items-center mb-2">
+                            <input type="checkbox" id="useOriginalImage" name="useOriginalImage" class="mr-2">
+                            <label for="useOriginalImage" class="text-sm text-gray-600">Use image from original URL</label>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-2" id="useOriginalImageNote">When checked, the preview image will be automatically fetched from the original URL's metadata</p>
+                        <input type="hidden" id="og_image_url" name="og_image_url">
+                        <input type="url" id="image_url" name="image_url" placeholder="https://example.com/image.jpg" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <p class="text-gray-500 text-sm mt-1">Image should be 300px or more in width and under 600KB in size</p>
                     </div>
                     <div class="bg-gray-50 p-6 rounded-lg">
@@ -274,6 +280,76 @@
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', () => {
             const imageUrlInput = document.getElementById('image_url');
+            const originalUrlInput = document.getElementById('original_url');
+            const useOriginalImageCheckbox = document.getElementById('useOriginalImage');
+            
+            function updatePreviews(imageUrl) {
+                [previewImage, fbPreviewImage, linkedinPreviewImage].forEach(img => {
+                    img.src = imageUrl || 'https://placehold.co/600x400';
+                    img.onerror = () => img.src = 'https://placehold.co/600x400?text=Invalid+Image';
+                });
+            }
+
+            let currentOgImageUrl = null;
+
+            async function fetchOgImage(url) {
+                try {
+                    const response = await fetch(`/get_og_image?url=${encodeURIComponent(url)}`);
+                    const data = await response.json();
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    currentOgImageUrl = data.image_url;
+                    document.getElementById('og_image_url').value = currentOgImageUrl;
+                    return data.image_url;
+                } catch (error) {
+                    console.error('Error fetching OG image:', error);
+                    currentOgImageUrl = null;
+                    document.getElementById('og_image_url').value = '';
+                    return null;
+                }
+            }
+
+            async function handleImageSourceChange() {
+                if (useOriginalImageCheckbox.checked) {
+                    imageUrlInput.setAttribute('disabled', '');
+                    imageUrlInput.removeAttribute('required');
+                    imageUrlInput.value = '';
+
+                    // Show loading state
+                    updatePreviews('https://placehold.co/600x400?text=Loading...');
+
+                    if (originalUrlInput.value) {
+                        const ogImage = await fetchOgImage(originalUrlInput.value);
+                        if (ogImage) {
+                            updatePreviews(ogImage);
+                        } else {
+                            updatePreviews('https://placehold.co/600x400?text=No+image+found');
+                        }
+                    } else {
+                        updatePreviews('https://placehold.co/600x400?text=Enter+URL+to+fetch+image');
+                    }
+                } else {
+                    imageUrlInput.removeAttribute('disabled');
+                    imageUrlInput.setAttribute('required', '');
+                    updatePreviews(imageUrlInput.value || 'https://placehold.co/600x400');
+                }
+            }
+
+            useOriginalImageCheckbox.addEventListener('change', handleImageSourceChange);
+            originalUrlInput.addEventListener('input', async () => {
+                if (useOriginalImageCheckbox.checked) {
+                    // Show loading state
+                    updatePreviews('https://placehold.co/600x400?text=Loading...');
+
+                    const ogImage = await fetchOgImage(originalUrlInput.value);
+                    if (ogImage) {
+                        updatePreviews(ogImage);
+                    } else {
+                        updatePreviews('https://placehold.co/600x400?text=No+image+found');
+                    }
+                }
+            });
             const titleInput = document.getElementById('og_title');
             const descriptionInput = document.getElementById('og_description');
             const shortLinkInput = document.getElementById('short_link');
@@ -296,11 +372,9 @@
             const linkedinPreviewDomain = document.getElementById('linkedinPreviewDomain');
 
             imageUrlInput.addEventListener('input', (e) => {
-                const imageUrl = e.target.value;
-                [previewImage, fbPreviewImage, linkedinPreviewImage].forEach(img => {
-                    img.src = imageUrl || 'https://placehold.co/600x400';
-                    img.onerror = () => img.src = 'https://via.placeholder.com/350x200?text=Invalid+Image';
-                });
+                if (!useOriginalImageCheckbox.checked) {
+                    updatePreviews(e.target.value);
+                }
             });
 
             titleInput.addEventListener('input', (e) => {
