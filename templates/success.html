@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Generated Successfully - ShortLinks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="/static/images/logo.png" type="image/x-icon">
+</head>
+<body class="bg-gradient-to-br from-indigo-50 to-blue-100 min-h-screen flex flex-col">
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <img src="/static/images/logo.png" alt="Logo" class="w-10">
+                <a href="/"> 
+                    <span class="text-2xl font-bold text-gray-800">shrlnk.icu</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-12 flex-grow flex items-center justify-center">
+        <div class="bg-white shadow-2xl rounded-xl overflow-hidden max-w-lg w-full">
+            <div class="bg-green-600 text-white p-6">
+                <h1 class="text-3xl font-bold">Success!</h1>
+            </div>
+            <div class="p-8 space-y-6">
+                <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+                    <p class="text-lg mb-4">Your short link has been generated:</p>
+                    <div class="bg-white border border-green-300 rounded-lg p-4 flex items-center justify-between">
+                        <span class="text-green-700 font-medium">{{ short_link }}</span>
+                        <button onclick="copyToClipboard('{{ short_link }}')" class="text-green-600 hover:text-green-800">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="/interface" class="flex-1 bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition duration-300 text-center">
+                        Create New Link
+                    </a>
+                    <a href="/" class="flex-1 bg-gray-600 text-white py-3 rounded-md hover:bg-gray-700 transition duration-300 text-center">
+                        Done
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 shrlnk.icu. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert('Link copied to clipboard!');
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+        });
+    }
+    </script>
+</body>
+</html>
+

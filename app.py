@@ -2,7 +2,7 @@ import sqlite3
 import os
 import requests
 from bs4 import BeautifulSoup
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, redirect, url_for, flash, session
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
@@ -16,6 +16,7 @@ from utils.init_db import init_db
 
 
 app = Flask(__name__)
+app.secret_key = os.environ.get('SECRET_KEY', 'your-default-secret-key-for-development')
 
 # Configuration
 DATABASE = "links.db"
@@ -165,7 +166,7 @@ def interface():
             if not image_url:
                 return render_template(
                     "interface.html",
-                    error="Failed to fetch image from original URL. Please try again or use a custom image URL.",
+                    error="Failed to fetch image from original URL. Please try again or use a custom image URL."
                 )
         else:
             image_url = request.form.get("image_url")
@@ -173,11 +174,12 @@ def interface():
         # Optional OG tag fields
         og_title = request.form.get("og_title", "")
         og_description = request.form.get("og_description", "")
+
         # Validate required fields
-        if not short_link or not original_url:
+        if not short_link or not original_url or not image_url:
             return render_template(
                 "interface.html",
-                error="Short link, original URL, and image URL are required!",
+                error="Short link, original URL, and image URL are required!"
             )
 
         try:
@@ -189,7 +191,7 @@ def interface():
                 if c.fetchone():
                     return render_template(
                         "interface.html",
-                        error="Short link already exists. Choose another.",
+                        error="Short link already exists. Choose another."
                     )
 
                 # Insert link with all details
@@ -203,15 +205,18 @@ def interface():
                 )
                 conn.commit()
 
+            # Redirect to success page
+            generated_link = f"https://{DOMAIN_NAME}/{short_link}"
             return render_template(
-                "interface.html",
-                success=f"Short link generated: https://{DOMAIN_NAME}/{short_link}",
+                "success.html",
+                short_link=generated_link
             )
+            
         except Exception as e:
             return render_template("interface.html", error=str(e))
 
+    # Handle GET request
     return render_template("interface.html")
-
 
 @app.route("/get_og_image")
 def get_og_image():
