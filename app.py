@@ -247,6 +247,9 @@ def get_og_image():
     except requests.RequestException as e:
         return jsonify({"error": f"Failed to fetch URL: {str(e)}"}), 500
 
+@app.route('/validate-website', methods=['GET'])
+def validate_website():
+    return jsonify({}), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
